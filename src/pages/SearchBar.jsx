@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import SideBarCategories from '../components/SideBarCategories';
-import { getCategories } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import ProductCard from '../components/ProductCard';
 
 class SearchBar extends Component {
   state = {
     categories: [],
+    inputSearch: '',
+    productList: [],
   };
 
   async componentDidMount() {
@@ -15,8 +18,23 @@ class SearchBar extends Component {
     });
   }
 
+  handleChange = (value) => (
+    this.setState({ inputSearch: value || '' })
+  );
+
+  handleClick = async () => {
+    const { inputSearch } = this.state;
+    const getProducts = await getProductsFromCategoryAndQuery(inputSearch);
+
+    this.setState({
+      productList: getProducts.results,
+    });
+
+    this.setState({ inputSearch: '' });
+  };
+
   render() {
-    const { categories } = this.state;
+    const { categories, inputSearch, productList } = this.state;
     return (
       <section>
         <Link
@@ -27,11 +45,42 @@ class SearchBar extends Component {
         </Link>
         <label htmlFor="inputSearch">
           Digite os termos a serem buscados
-          <input type="text" id="inputSearch" />
+          <input
+            type="text"
+            id="inputSearch"
+            data-testid="query-input"
+            value={ inputSearch }
+            onChange={ ({ value }) => this.handleChange(value) }
+          />
+          <button
+            data-testid="query-button"
+            type="button"
+            onClick={ () => this.handleClick() }
+          >
+            Pesquisar
+          </button>
         </label>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        {
+          productList.length ? productList
+            .map(({
+              id,
+              title,
+              thumbnail,
+              price,
+            }) => (
+              <ProductCard
+                key={ id }
+                productName={ title }
+                productImg={ thumbnail }
+                productPrice={ price }
+              />))
+            : (
+              <p>Nenhum produto foi encontrado</p>
+            )
+        }
         <SideBarCategories categories={ categories } />
       </section>
     );
