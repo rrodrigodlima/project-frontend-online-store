@@ -1,4 +1,4 @@
-  const urlBase = 'https://api.mercadolibre.com/sites/MLB';
+const urlBase = 'https://api.mercadolibre.com/sites/MLB';
 export async function getCategories() {
   const URL = `${urlBase}/categories`;
   const response = await fetch(URL);
