@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class SideBarCategories extends Component {
   render() {
-    const { categories } = this.props;
+    const { categories, handleChangeRadio } = this.props;
     return (
       <div>
         {
@@ -14,6 +14,7 @@ class SideBarCategories extends Component {
                 name="categoria"
                 id={ id }
                 type="radio"
+                onChange={ ({ target }) => handleChangeRadio(target.id) }
               />
             </label>
           ))
@@ -30,10 +31,12 @@ SideBarCategories.propTypes = {
         id: PropTypes.string,
         name: PropTypes.string,
       })),
+  handleChangeRadio: PropTypes.func,
 };
 
 SideBarCategories.defaultProps = {
   categories: [{ id: '', name: '' }],
+  handleChangeRadio: () => {},
 };
 
 export default SideBarCategories;

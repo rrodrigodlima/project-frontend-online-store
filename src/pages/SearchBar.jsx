@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import SideBarCategories from '../components/SideBarCategories';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
-import ProductCard from '../components/ProductCard';
+import ProductList from '../components/ProductList';
 
 class SearchBar extends Component {
   state = {
@@ -22,14 +22,19 @@ class SearchBar extends Component {
     this.setState({ inputSearch: value || '' })
   );
 
-  handleClick = async () => {
-    const { inputSearch } = this.state;
-    const getProducts = await getProductsFromCategoryAndQuery(inputSearch);
-
+  handleChangeRadio = async (value) => {
+    const getProducts = await getProductsFromCategoryAndQuery(value);
     this.setState({
       productList: getProducts.results,
     });
+  };
 
+  handleClick = async () => {
+    const { inputSearch } = this.state;
+    const getProducts = await getProductsFromCategoryAndQuery('', inputSearch);
+    this.setState({
+      productList: getProducts.results,
+    });
     this.setState({ inputSearch: '' });
   };
 
@@ -63,25 +68,13 @@ class SearchBar extends Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        {
-          productList.length ? productList
-            .map(({
-              id,
-              title,
-              thumbnail,
-              price,
-            }) => (
-              <ProductCard
-                key={ id }
-                productName={ title }
-                productImg={ thumbnail }
-                productPrice={ price }
-              />))
-            : (
-              <p>Nenhum produto foi encontrado</p>
-            )
-        }
-        <SideBarCategories categories={ categories } />
+        <ProductList
+          productList={ productList }
+        />
+        <SideBarCategories
+          categories={ categories }
+          handleChangeRadio={ this.handleChangeRadio }
+        />
       </section>
     );
   }
