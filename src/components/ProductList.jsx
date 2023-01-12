@@ -5,7 +5,6 @@ import ProductCard from './ProductCard';
 class ProductList extends Component {
   render() {
     const { productList } = this.props;
-    console.log(productList);
     return (
       <div>
         {
@@ -18,6 +17,7 @@ class ProductList extends Component {
             }) => (
               <ProductCard
                 key={ id }
+                productId={ id }
                 productName={ title }
                 productImg={ thumbnail }
                 productPrice={ price }
