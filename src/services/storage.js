@@ -3,8 +3,33 @@ export function getCart() {
   return currentCart || [];
 }
 
-export async function increaseQty(itemId) {
-  const currentCart = await getCart();
+export function decreaseQty(itemId) {
+  const currentList = getCart();
+  const updatedList = currentList.map((product) => {
+    if ((product.productId || '') === itemId && product.productQty > 1) {
+      return {
+        productId: product.productId,
+        productName: product.productName,
+        productImg: product.productImg,
+        productPrice: product.productPrice,
+        productQty: product.productQty - 1,
+      };
+    }
+    return product;
+  });
+  localStorage.setItem('shoppingCart', JSON.stringify(updatedList));
+  return updatedList;
+}
+
+export function removeFromCart(value) {
+  const currentList = getCart();
+  const updatedList = currentList.filter(({ productId }) => productId !== value);
+  localStorage.setItem('shoppingCart', JSON.stringify(updatedList));
+  return updatedList;
+}
+
+export function increaseQty(itemId) {
+  const currentCart = getCart();
   const updateList = currentCart.map((product) => {
     if (product.productId === itemId) {
       return {
@@ -18,10 +43,11 @@ export async function increaseQty(itemId) {
     return product;
   });
   localStorage.setItem('shoppingCart', JSON.stringify(updateList));
+  return updateList;
 }
 
-export async function addCart(value) {
-  const currentCart = await getCart();
+export function addCart(value) {
+  const currentCart = getCart();
   if (currentCart.some(({ productId }) => value.productId === productId)) {
     increaseQty(value.productId);
   } else {
