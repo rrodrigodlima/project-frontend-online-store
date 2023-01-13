@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ButtonAddCart from '../components/ButtonAddCart';
 import { getProductById } from '../services/api';
 
 class ProductDetails extends Component {
@@ -21,7 +22,9 @@ class ProductDetails extends Component {
 
   render() {
     const { productDetails:
-      { title, price, thumbnail, attributes }, loading } = this.state;
+      { title, price, thumbnail, attributes, id }, loading } = this.state;
+    const product = {
+      productId: id, productName: title, productImg: thumbnail, productPrice: price };
     if (loading) return <p>loading</p>;
     return (
       <div id="details">
@@ -31,13 +34,17 @@ class ProductDetails extends Component {
         <ul id="attributes">
           {
             attributes.map(({ name, value_id: valueId, value_name: valueName }) => (
-              <li key={ valueId }>
+              <li key={ `${name}: ${valueId}` }>
                 { `${name}: ${valueName}` }
               </li>
             ))
           }
         </ul>
         <Link to="/shoppingcart" data-testid="shopping-cart-button">Shopping Cart</Link>
+        <ButtonAddCart
+          testId="product-detail-add-to-cart"
+          product={ product }
+        />
       </div>
     );
   }

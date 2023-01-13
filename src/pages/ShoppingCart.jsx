@@ -7,8 +7,8 @@ class ShoppingCart extends Component {
     cartList: [],
   };
 
-  componentDidMount() {
-    const currentList = getCart();
+  async componentDidMount() {
+    const currentList = await getCart();
     this.setState({
       cartList: currentList || [],
     });
