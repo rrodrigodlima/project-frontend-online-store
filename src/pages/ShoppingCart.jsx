@@ -7,12 +7,17 @@ class ShoppingCart extends Component {
     cartList: [],
   };
 
-  async componentDidMount() {
-    const currentList = await getCart();
-    this.setState({
-      cartList: currentList || [],
-    });
+  componentDidMount() {
+    const currentList = getCart();
+    this.updateCart(currentList);
   }
+
+  updateCart = (cart) => {
+    // const currentList = getCart();
+    this.setState({
+      cartList: cart || [],
+    });
+  };
 
   render() {
     const { cartList } = this.state;
@@ -32,6 +37,7 @@ class ShoppingCart extends Component {
             productQty={ productQty }
             productPrice={ productPrice }
             productImg={ productImg }
+            updateCart={ this.updateCart }
           />))
           : <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> }
       </section>
