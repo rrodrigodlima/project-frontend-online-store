@@ -55,3 +55,16 @@ export function addCart(value) {
     localStorage.setItem('shoppingCart', JSON.stringify(updateList));
   }
 }
+
+export function getReviews(id) {
+  const savedReviews = localStorage.getItem(id);
+  const result = JSON.parse(savedReviews);
+  return result || [];
+}
+
+export function addReviews(id, review) {
+  const savedReviews = getReviews(id);
+  const updateReviews = [...savedReviews, review];
+  localStorage.setItem(id, JSON.stringify(updateReviews));
+  return updateReviews;
+}
