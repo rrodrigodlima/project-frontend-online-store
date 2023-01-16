@@ -3,25 +3,37 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ButtonAddCart from '../components/ButtonAddCart';
 import { getProductById } from '../services/api';
+import Form from '../components/Form';
+import ReviewList from '../components/ReviewList';
+import { getReviews } from '../services/storage';
 
 class ProductDetails extends Component {
   state = {
     productDetails: [],
     loading: true,
+    reviews: [],
   };
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
+    const currentReviews = getReviews(id);
     const getProducts = await getProductById(id);
     this.setState({
       productDetails: getProducts,
       loading: false,
     });
+    this.updateReviews(currentReviews);
   }
+
+  updateReviews = (newReview) => {
+    this.setState({
+      reviews: newReview,
+    });
+  };
 
   render() {
     const { productDetails:
-      { title, price, thumbnail, attributes, id }, loading } = this.state;
+      { title, price, thumbnail, attributes, id }, loading, reviews } = this.state;
     const product = {
       productId: id, productName: title, productImg: thumbnail, productPrice: price };
     if (loading) return <p>loading</p>;
@@ -44,6 +56,8 @@ class ProductDetails extends Component {
           testId="product-detail-add-to-cart"
           product={ product }
         />
+        <Form productId={ id } updateReviews={ this.updateReviews } />
+        <ReviewList reviews={ reviews } />
       </div>
     );
   }
