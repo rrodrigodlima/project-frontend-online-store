@@ -9,12 +9,12 @@ export default class ProductCard extends Component {
       productImg,
       productPrice,
       productId,
-      updateCounter, freeShipping } = this.props;
-    console.log(updateCounter, 'productCard');
+      updateCounter, freeShipping, availableQuantity } = this.props;
+    console.log(availableQuantity);
     return (
       <div id="productCard" data-testid="product">
         <Link
-          to={ { pathname: `/product/${productId}`, state: { updateCounter } } }
+          to={ { pathname: `/product/${productId}` } }
           data-testid="product-detail-link"
         >
           <p id="name">{ productName }</p>
@@ -26,7 +26,11 @@ export default class ProductCard extends Component {
         }
         <ButtonAddCart
           testId="product-add-to-cart"
-          product={ { productId, productName, productImg, productPrice } }
+          product={ { productId,
+            productName,
+            productImg,
+            productPrice,
+            availableQuantity } }
           updateCounter={ updateCounter }
         />
       </div>
@@ -41,6 +45,7 @@ ProductCard.propTypes = {
   productId: PropTypes.string,
   updateCounter: PropTypes.func.isRequired,
   freeShipping: PropTypes.bool,
+  availableQuantity: PropTypes.number.isRequired,
 };
 
 ProductCard.defaultProps = {

@@ -24,7 +24,7 @@ class ProductDetails extends Component {
       loading: false,
     });
     this.updateReviews(currentReviews);
-    this.stateCounter();
+    this.updateCounter();
   }
 
   updateReviews = (newReview) => {
@@ -33,7 +33,7 @@ class ProductDetails extends Component {
     });
   };
 
-  stateCounter = () => {
+  updateCounter = () => {
     const result = localStorage.getItem('counter');
     this.setState({
       counter: result,
@@ -41,8 +41,6 @@ class ProductDetails extends Component {
   };
 
   render() {
-    const { history: { location: { state: { updateCounter } } } } = this.props;
-    console.log(updateCounter());
     const { productDetails:
       { title, price, thumbnail, attributes, id },
     loading, reviews, counter } = this.state;
@@ -77,7 +75,7 @@ class ProductDetails extends Component {
         <ButtonAddCart
           testId="product-detail-add-to-cart"
           product={ product }
-          updateCounter={ updateCounter }
+          updateCounter={ this.updateCounter }
         />
         <Form productId={ id } updateReviews={ this.updateReviews } />
         <ReviewList reviews={ reviews } />
@@ -88,13 +86,6 @@ class ProductDetails extends Component {
 
 ProductDetails.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ id: PropTypes.string }) }),
-  history: PropTypes.shape({
-    location: PropTypes.shape({
-      state: PropTypes.shape({
-        updateCounter: PropTypes.func,
-      }),
-    }),
-  }).isRequired,
 };
 
 ProductDetails.defaultProps = {

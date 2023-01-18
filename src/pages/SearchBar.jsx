@@ -27,7 +27,6 @@ class SearchBar extends Component {
     this.setState({
       counter,
     });
-    console.log('upp');
   };
 
   handleChange = (value) => (
