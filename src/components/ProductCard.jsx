@@ -9,7 +9,7 @@ export default class ProductCard extends Component {
       productImg,
       productPrice,
       productId,
-      updateCounter } = this.props;
+      updateCounter, freeShipping } = this.props;
     console.log(updateCounter, 'productCard');
     return (
       <div id="productCard" data-testid="product">
@@ -21,6 +21,9 @@ export default class ProductCard extends Component {
           <img src={ productImg } alt={ productName } />
           <p id="price">{ productPrice }</p>
         </Link>
+        {
+          freeShipping && <p data-testid="free-shipping">Frete Grátis</p>
+        }
         <ButtonAddCart
           testId="product-add-to-cart"
           product={ { productId, productName, productImg, productPrice } }
@@ -37,6 +40,7 @@ ProductCard.propTypes = {
   productPrice: PropTypes.number,
   productId: PropTypes.string,
   updateCounter: PropTypes.func.isRequired,
+  freeShipping: PropTypes.bool,
 };
 
 ProductCard.defaultProps = {
@@ -44,4 +48,5 @@ ProductCard.defaultProps = {
   productImg: '',
   productPrice: 0,
   productId: '',
+  freeShipping: false,
 };
