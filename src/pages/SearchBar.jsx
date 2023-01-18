@@ -3,20 +3,32 @@ import { Link } from 'react-router-dom';
 import SideBarCategories from '../components/SideBarCategories';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import ProductList from '../components/ProductList';
+import { counterCart } from '../services/storage';
 
 class SearchBar extends Component {
   state = {
     categories: [],
     inputSearch: '',
     productList: [],
+    counter: '0',
   };
 
   async componentDidMount() {
     const categoriesList = await getCategories();
+    const counter = counterCart();
     this.setState({
       categories: categoriesList,
+      counter,
     });
   }
+
+  updateCounter = () => {
+    const counter = counterCart();
+    this.setState({
+      counter,
+    });
+    console.log('upp');
+  };
 
   handleChange = (value) => (
     this.setState({ inputSearch: value || '' })
@@ -39,7 +51,7 @@ class SearchBar extends Component {
   };
 
   render() {
-    const { categories, inputSearch, productList } = this.state;
+    const { categories, inputSearch, productList, counter } = this.state;
     return (
       <section>
         <Link
@@ -47,6 +59,11 @@ class SearchBar extends Component {
           data-testid="shopping-cart-button"
         >
           Carrinho de Compras
+          <span
+            data-testid="shopping-cart-size"
+          >
+            {counter}
+          </span>
         </Link>
         <label htmlFor="inputSearch">
           Digite os termos a serem buscados
@@ -70,6 +87,7 @@ class SearchBar extends Component {
         </p>
         <ProductList
           productList={ productList }
+          updateCounter={ this.updateCounter }
         />
         <SideBarCategories
           categories={ categories }

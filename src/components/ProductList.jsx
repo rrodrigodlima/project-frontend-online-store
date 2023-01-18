@@ -4,7 +4,8 @@ import ProductCard from './ProductCard';
 
 class ProductList extends Component {
   render() {
-    const { productList } = this.props;
+    const { productList, updateCounter } = this.props;
+    console.log(updateCounter, 'productList');
     return (
       <div>
         {
@@ -21,6 +22,7 @@ class ProductList extends Component {
                 productName={ title }
                 productImg={ thumbnail }
                 productPrice={ price }
+                updateCounter={ updateCounter }
               />))
             : (
               <p>Nenhum produto foi encontrado</p>
@@ -33,6 +35,7 @@ class ProductList extends Component {
 
 ProductList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.shape({})),
+  updateCounter: PropTypes.func.isRequired,
 };
 
 ProductList.defaultProps = {
