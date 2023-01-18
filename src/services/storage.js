@@ -7,7 +7,6 @@ export function counterCart() {
   const getCartList = getCart();
   const result = getCartList.reduce((total, current) => total + current.productQty, 0);
   localStorage.setItem('counter', JSON.stringify(result));
-  console.log(result);
   return result;
 }
 
@@ -16,10 +15,7 @@ export function decreaseQty(itemId) {
   const updatedList = currentList.map((product) => {
     if ((product.productId || '') === itemId && product.productQty > 1) {
       return {
-        productId: product.productId,
-        productName: product.productName,
-        productImg: product.productImg,
-        productPrice: product.productPrice,
+        ...product,
         productQty: product.productQty - 1,
       };
     }
@@ -41,12 +37,9 @@ export function removeFromCart(value) {
 export function increaseQty(itemId) {
   const currentCart = getCart();
   const updateList = currentCart.map((product) => {
-    if (product.productId === itemId) {
+    if (product.productId === itemId && product.availableQuantity > product.productQty) {
       return {
-        productId: product.productId,
-        productName: product.productName,
-        productImg: product.productImg,
-        productPrice: product.productPrice,
+        ...product,
         productQty: product.productQty + 1,
       };
     }

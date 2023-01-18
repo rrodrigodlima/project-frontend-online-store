@@ -5,6 +5,7 @@ import ProductCard from './ProductCard';
 class ProductList extends Component {
   render() {
     const { productList, updateCounter } = this.props;
+    console.log(productList);
     return (
       <div>
         {
@@ -14,6 +15,7 @@ class ProductList extends Component {
               title,
               thumbnail,
               price,
+              available_quantity: availableQuantity,
               shipping: { free_shipping: freeShipping },
             }) => (
               <ProductCard
@@ -23,6 +25,7 @@ class ProductList extends Component {
                 productImg={ thumbnail }
                 productPrice={ price }
                 updateCounter={ updateCounter }
+                availableQuantity={ availableQuantity }
                 freeShipping={ freeShipping }
               />))
             : (

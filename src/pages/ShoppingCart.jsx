@@ -22,6 +22,7 @@ class ShoppingCart extends Component {
 
   render() {
     const { cartList } = this.state;
+    console.log(cartList);
     return (
       <section>
         { cartList.length
