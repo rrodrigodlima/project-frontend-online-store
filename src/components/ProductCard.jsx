@@ -5,10 +5,18 @@ import ButtonAddCart from './ButtonAddCart';
 
 export default class ProductCard extends Component {
   render() {
-    const { productName, productImg, productPrice, productId } = this.props;
+    const { productName,
+      productImg,
+      productPrice,
+      productId,
+      updateCounter } = this.props;
+    console.log(updateCounter, 'productCard');
     return (
       <div id="productCard" data-testid="product">
-        <Link to={ `/product/${productId}` } data-testid="product-detail-link">
+        <Link
+          to={ { pathname: `/product/${productId}`, state: { updateCounter } } }
+          data-testid="product-detail-link"
+        >
           <p id="name">{ productName }</p>
           <img src={ productImg } alt={ productName } />
           <p id="price">{ productPrice }</p>
@@ -16,6 +24,7 @@ export default class ProductCard extends Component {
         <ButtonAddCart
           testId="product-add-to-cart"
           product={ { productId, productName, productImg, productPrice } }
+          updateCounter={ updateCounter }
         />
       </div>
     );
@@ -27,6 +36,7 @@ ProductCard.propTypes = {
   productImg: PropTypes.string,
   productPrice: PropTypes.number,
   productId: PropTypes.string,
+  updateCounter: PropTypes.func.isRequired,
 };
 
 ProductCard.defaultProps = {

@@ -12,6 +12,7 @@ class ProductDetails extends Component {
     productDetails: [],
     loading: true,
     reviews: [],
+    counter: '0',
   };
 
   async componentDidMount() {
@@ -23,6 +24,7 @@ class ProductDetails extends Component {
       loading: false,
     });
     this.updateReviews(currentReviews);
+    this.stateCounter();
   }
 
   updateReviews = (newReview) => {
@@ -31,9 +33,19 @@ class ProductDetails extends Component {
     });
   };
 
+  stateCounter = () => {
+    const result = localStorage.getItem('counter');
+    this.setState({
+      counter: result,
+    });
+  };
+
   render() {
+    const { history: { location: { state: { updateCounter } } } } = this.props;
+    console.log(updateCounter());
     const { productDetails:
-      { title, price, thumbnail, attributes, id }, loading, reviews } = this.state;
+      { title, price, thumbnail, attributes, id },
+    loading, reviews, counter } = this.state;
     const product = {
       productId: id, productName: title, productImg: thumbnail, productPrice: price };
     if (loading) return <p>loading</p>;
@@ -51,10 +63,21 @@ class ProductDetails extends Component {
             ))
           }
         </ul>
-        <Link to="/shoppingcart" data-testid="shopping-cart-button">Shopping Cart</Link>
+        <Link
+          to="/shoppingcart"
+          data-testid="shopping-cart-button"
+        >
+          Shopping Cart
+          <span
+            data-testid="shopping-cart-size"
+          >
+            {counter}
+          </span>
+        </Link>
         <ButtonAddCart
           testId="product-detail-add-to-cart"
           product={ product }
+          updateCounter={ updateCounter }
         />
         <Form productId={ id } updateReviews={ this.updateReviews } />
         <ReviewList reviews={ reviews } />
@@ -65,6 +88,13 @@ class ProductDetails extends Component {
 
 ProductDetails.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ id: PropTypes.string }) }),
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      state: PropTypes.shape({
+        updateCounter: PropTypes.func,
+      }),
+    }),
+  }).isRequired,
 };
 
 ProductDetails.defaultProps = {

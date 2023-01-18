@@ -3,14 +3,20 @@ import React, { Component } from 'react';
 import { addCart } from '../services/storage';
 
 export default class ButtonAddCart extends Component {
+  handleClick = () => {
+    const { product, updateCounter } = this.props;
+    addCart(product);
+    updateCounter();
+  };
+
   render() {
-    const { testId, product } = this.props;
+    const { testId } = this.props;
     return (
       <div>
         <button
           type="button"
           data-testid={ testId }
-          onClick={ () => addCart(product) }
+          onClick={ () => this.handleClick() }
         >
           Adicionar ao carrinho
         </button>
@@ -22,4 +28,5 @@ export default class ButtonAddCart extends Component {
 ButtonAddCart.propTypes = {
   product: PropTypes.shape({}).isRequired,
   testId: PropTypes.string.isRequired,
+  updateCounter: PropTypes.func.isRequired,
 };
